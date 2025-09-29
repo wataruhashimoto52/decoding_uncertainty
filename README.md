@@ -29,7 +29,7 @@ Decoding strategies manipulate the probability distribution underlying the outpu
 
 ## Setup
 
-我々はSingularity環境におけるSlurmを用いてSlurmでバッチジョブを投入することで実験結果を得た．もしこれらを使わない場合は、適宜 `.def` ファイルに記述されているライブラリをあなたの環境にインストールしてください．
+We ran experiments by submitting Slurm batch jobs inside a Singularity environment. If you do not use Singularity/Slurm, please install the libraries listed in the `.def` file into your environment.
 
 ```bash
 module load singularity
@@ -39,8 +39,7 @@ singularity build --fakeroot llm-uncertainty.sif llm-uncertainty.def
 
 ## Run
 
-データセットやデコーディング戦略のオプション一覧については、`batch_run.sh` 内に記述されている．
-
+For a list of available datasets and decoding strategy options, see `batch_run.sh`.
 
 ```bash
 sbatch batch_run.sh
