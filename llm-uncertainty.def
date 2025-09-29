@@ -1,0 +1,58 @@
+Bootstrap: docker
+From:nvidia/cuda:12.2.0-base-ubuntu22.04
+
+%environment
+export LC_ALL=C.UTF-8
+export Lang=C.UTF-8
+export TZ=Asia/Tokyo
+ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+
+export PIPENV_VENV_IN_PROJECT=1
+export PATH="/usr/local/opt/openssl/bin:$PATH"
+
+
+%post
+INSTALL_PYTHON_VERSION=3.10.10
+apt-get update && apt-get dist-upgrade -y
+apt install -y build-essential
+apt install -y make gcc
+DEBIAN_FRONTEND=noninteractive apt-get install -y coreutils vim less nkf jq zip unzip wget meld sudo git curl telnet locate
+DEBIAN_FRONTEND=noninteractive apt-get install -y make build-essential libssl-dev zlib1g-dev libbz2-dev \
+    libreadline-dev libsqlite3-dev wget curl llvm libncurses5-dev libncursesw5-dev \
+    xz-utils tk-dev libffi-dev liblzma-dev python3-distutils \
+    openssl git bzip2 bash-completion
+apt-get install -y python3-ldb-dev gcc libffi-dev libcurl4-openssl-dev
+apt-get install -y python3-distutils python3-testresources
+apt-get install -y python3-pip
+
+# python install 
+wget https://www.python.org/ftp/python/3.10.8/Python-3.10.8.tar.xz
+tar xJf Python-3.10.8.tar.xz
+cd Python-3.10.8
+./configure
+make
+make install
+
+# pipenv
+pip install -U pip
+
+# clean up
+apt-get clean
+rm -rf /var/lib/apt/lists/*
+
+export PATH=$PATH:$HOME/.local/bin
+pip install lm-polygraph==0.4.0
+
+#### install other related env
+pip install cleantext
+pip install openai
+
+# unused: pip install https://github.com/Dao-AILab/flash-attention/releases/download/v2.7.4.post1/flash_attn-2.7.4.post1+cu12torch2.5cxx11abiTRUE-cp310-cp310-linux_x86_64.whl --no-build-isolation
+
+pip install prettytable
+pip install setuptools==40.8.0
+pip install sacremoses==0.1.1
+pip install typed-argument-parser==1.10.1
+pip install einops
+pip install spacy==3.8.4
+python -m spacy download en_core_web_sm
