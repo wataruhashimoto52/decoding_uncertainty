@@ -1,0 +1,2 @@
+Please complete the remaining Python function code based on the following docstring content. 
+{text}
